@@ -29,11 +29,12 @@ Album.Gallery.router = (function(){
                     userId:userId
                 });
             },
-            createAlbum:function(id) {
+            createAlbum:function(userId) {
                 this.createAlbumModel = new Album.Gallery.model.addAlbum();
                 this.cretaeAlbumView = new Album.Gallery.view.createAlbumView({
                     createAlbumModel:this.createAlbumModel,
                     parent:this,
+		    userId:userId,
                     el:$("#album")
                 })
             },

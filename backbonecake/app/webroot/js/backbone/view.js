@@ -44,6 +44,7 @@ Album.Gallery.view = (function () {
             initialize:function(opt) {
                 this.createAlbumModel = opt.createAlbumModel;
                 this.$el = opt.el;
+		this.userId = opt.userId;
                 this.$el.html('');
                 this.$el.html(this.createAlbumTemplate());
             },
@@ -54,7 +55,7 @@ Album.Gallery.view = (function () {
                     this.createAlbumModel.save(
                         {
                             name:$('#albumName').val(),
-                            user_id:1
+                            user_id:this.userId
                         },
                         {
                             wait:true,
@@ -215,7 +216,7 @@ Album.Gallery.view = (function () {
 
         addPhotoView:Backbone.View.extend({
             events:{
-                "click .addPhoto":"addPhoto"
+                "click .addmorePhotoBtn":"addMorePhoto"
             },
             addPhotoTemplate:_.template($('#addPhoto').html()),
 
@@ -250,65 +251,13 @@ Album.Gallery.view = (function () {
                 });
             },
 
-            addPhoto:function() {
-                self = this;
-                if (this.validPhoto()) {
-                    this.addPhotoModel.save(
-                        {
-                            name:$('#photo').val(),
-                            album_id:1
-                        },
-                        {
-                            wait:true,
-                            success:function(model, response) {
-                                if (!response.error) {
-                                    if (confirm('Want to add more photo?')) {
-                                        self.$el.html(self.addPhotoTemplate);
-                                    } else {
-                                        var dashboardRouter = new Backbone.Router();
-                                        dashboardRouter.navigate('dashboard/' + 1, {trigger:true});
-                                    }
-                                }
-                            }
-                        }
-                    )
-                }
-            },
-
-            validPhoto:function() {
-                $.validator.addMethod("uploadFile", function (val, element) {
-
-                    if (val) {
-                        var ext = val.split('.').pop().toLowerCase();
-                        var allow = new Array('gif', 'png', 'jpg', 'jpeg');
-                        if (jQuery.inArray(ext, allow) == -1) {
-                            return false
-                        }
-                        return true;
-                    }
-                    return true;
-                }, "Please provide files with .jpg, .jpeg, .png, .gif extensions.");
-
-                $('#addPhotoForm').validate({
-                    rules:{
-                        albumImage:{
-                            required:true,
-                            uploadFile:true
-                        }
-                    },
-                    messages:{
-                        albumImage:{
-                            required:"Please provide Image",
-                            uploadFile:"Please provide files with .jpg, .jpeg, .png, .gif extensions."
-                        }
-                    }
-                });
-                if (jQuery("#addPhotoForm").valid()) {
-                    return true;
-                }
-                return false;
-
+            addMorePhoto:function() {
+                this.$el.html('');
+                this.$el.append(this.addPhotoTemplate());
+                this.render();
             }
+
+
         })
     };
 })();

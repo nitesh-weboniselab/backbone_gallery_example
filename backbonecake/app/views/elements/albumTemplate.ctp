@@ -31,7 +31,8 @@
 
         <div id="fine-uploader"></div>
     </form>
-    <button class="addPhoto">Add Photo</button>
+    <button class="addmorePhotoBtn">Add More Photo</button>
+
 </script>
 
 <script type="text/script" id="albumListTemplate">
