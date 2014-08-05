@@ -19,4 +19,17 @@ class Photo extends AppModel {
      }
      return false;
     }
+
+    public function deletePhoto($photoId){
+        $sendAlbumId = array();
+        $this->id = $photoId;
+        $albumId = $this->field('Photo.album_id');
+        if(!empty($albumId)){
+            $this->delete();
+            $sendAlbumId = array('albumId' => $albumId);
+        } else{
+            $sendAlbumId = array('error' => 'No photo found');
+        }
+        return $sendAlbumId;
+    }
 }

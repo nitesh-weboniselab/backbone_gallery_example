@@ -69,4 +69,11 @@ class AlbumController extends AppController {
         $sendPhotoList = $this->Photo->getPhotos($albumId);
         echo json_encode($sendPhotoList);
     }
+
+    public function deletePhoto($photoId){
+        $this->layout = 'ajax';
+        $this->autoRender = false;
+        $sendAlbumId = $this->Photo->deletePhoto($photoId);
+        echo $sendAlbumId;
+    }
 }

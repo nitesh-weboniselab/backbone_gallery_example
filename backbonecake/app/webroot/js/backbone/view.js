@@ -44,7 +44,7 @@ Album.Gallery.view = (function () {
             initialize:function(opt) {
                 this.createAlbumModel = opt.createAlbumModel;
                 this.$el = opt.el;
-		this.userId = opt.userId;
+                this.userId = opt.userId;
                 this.$el.html('');
                 this.$el.html(this.createAlbumTemplate());
             },
@@ -92,9 +92,12 @@ Album.Gallery.view = (function () {
 
         userLoginView:Backbone.View.extend({
             events:{
-                "click #userLoginBtn":"userAuthenticateAction"
+                "click #userLoginBtn":"userAuthenticate",
+                "click #userRegistrationBtn":"userRegistrationForm",
+                "click #registerBtn": "userRegistration"
             },
             userLoginTemplate:_.template($("#userLoginTemplate").html()),
+            userRegistrationTemplate:_.template($("#userRegistrationTemplate").html()),
             initialize:function(opt) {
                 this.userLoginModel = opt.userLoginModel;
                 this.$el = opt.el;
@@ -106,11 +109,13 @@ Album.Gallery.view = (function () {
                 return this;
             },
 
-            userAuthenticateAction:function(e) {
+            userAuthenticate:function(e) {
+
                 if (this.validateLogin()) {
                     this.userLoginModel.save({
-                            username:$('#username').val(),
-                            password:$('#password').val()
+                            type:"login",
+                            username:$('.username').val(),
+                            password:$('.password').val()
                         },
                         {
                             wait:true,
@@ -153,7 +158,37 @@ Album.Gallery.view = (function () {
                     return true;
                 }
                 return false;
+            },
+
+            userRegistrationForm:function(e){
+                this.$el.html(this.userRegistrationTemplate());
+            },
+
+            userRegistration:function(e){
+                this.userLoginModel.save({
+                        type:"register",
+                        username:$('.username').val(),
+                        password:$('.password').val()
+                    },
+                    {
+                        wait:true,
+                        success:function(model, response) {
+                            if (!response.error) {
+                                console.log("Successfull");
+                                console.log(response.userId);
+                                var dashboardRouter = new Backbone.Router();
+                                dashboardRouter.navigate('dashboard/' + response.userId, {trigger:true});
+                            } else {
+                                $('#error').html();
+                            }
+                        },
+                        error:function(model, error) {
+
+                        }
+                    }
+                );
             }
+
         }),
 
         listAlbumView:Backbone.View.extend({
@@ -193,7 +228,8 @@ Album.Gallery.view = (function () {
 
         listPhotoView:Backbone.View.extend({
             events:{
-                "click .albumList":"albumList"
+                "click .albumList":"albumList",
+                "click .deletePhoto" : "deletePhoto"
             },
             photoListTemplate:_.template($('#photoListTemplate').html()),
             initialize:function(opt){
@@ -211,6 +247,11 @@ Album.Gallery.view = (function () {
                 }
                 $(".group1").colorbox({rel:'group1'});
 
+            },
+            deletePhoto:function(e){
+                var photoId = $(e.currentTarget).attr('id');
+                var deletePhotoRouter = new Backbone.Router();
+                deletePhotoRouter.navigate('deletePhoto/'+photoId,({trigger:true}));
             }
         }),
 
@@ -256,8 +297,25 @@ Album.Gallery.view = (function () {
                 this.$el.append(this.addPhotoTemplate());
                 this.render();
             }
+        }),
+        deletePhotoView : Backbone.View.extend({
+            initialize:function(opt){
+                $('#album').html('');
+                this.deletePhotoModel = opt.deletePhotoModel;
+                this.delete();
+            },
+            delete:function(){
 
-
+                this.deletePhotoModel.fetch({
+                    wait:true,
+                    success:function(model, response){
+                        if(!response.error){
+                            var listPhotoRouter = new Backbone.Router();
+                            listPhotoRouter.navigate('listPhoto/'+response.albumId,({trigger:true}));
+                        }
+                    }
+                });
+            }
         })
     };
 })();

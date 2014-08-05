@@ -34,6 +34,12 @@ Album.Gallery.model = (function(){
                 this.url = 'album/listPhoto/'+albumId
             },
             url:this.url
+        }),
+        deletePhotoModel : Backbone.Model.extend({
+            initialize:function(photoId){
+                this.url = 'album/deletePhoto/'+photoId
+            },
+            url:this.url
         })
     };
 })();

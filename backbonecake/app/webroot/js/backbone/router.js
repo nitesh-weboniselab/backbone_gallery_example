@@ -67,6 +67,13 @@ Album.Gallery.router = (function(){
                     albumId:albumId,
                     el:$('#album')
                 });
+            },
+            deletePhoto:function(photoId){
+                this.deletePhotoModel = new Album.Gallery.model.deletePhotoModel(photoId);
+                this.deletePhotoView = new Album.Gallery.view.deletePhotoView({
+                    deletePhotoModel:this.deletePhotoModel,
+                    parent:this
+                });
             }
         })
 
