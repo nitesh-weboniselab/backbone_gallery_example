@@ -1,20 +1,19 @@
-backbone_gallery_example
-========================
-clone it and put it in localhost.
+This is an example of gallery in backbone with cakephp 2.5
 
-use the url to start http://localhost/backbonecake/album 
+Plugin contains:
 
-we will get the login page 
-use the username : webonise 
-and password : webonise6186
+User Dashboard :- provided two option 
+1) Create new album - To create new album
+2) List Album - list the User created album
 
-we will get the dashboard page
-on dashboard page we have add album and list album option.
+Create Album :-
+In this i have provide input box to take the album name.
+on click of Create user will see the add photo page  where he can add the photo.
 
-1)on click of add album will get add album form fill the name and click on create.
-  on click of create it shows add photo view on that we use the fineuploader. select the file on click of select file.
-  it will upload the file.
+List Album :- In this option user will see all his album with thumbnail image  and edit album name and add photo album
 
-2) on click of list album will get the list of all albums and add more photo option
-  click the album name will get the list of photo of that album. click the photo it will show the next previous option to show next previous  photo
- on click of add more it will show add photo view.
+on click of image all user added image get display with delete option. on click of any image user will see previous and next option to see images.
+
+to edit album name on click of edit album provide input box where user can enter album name and update album name option. 
+
+on click of add photo user is able to add more photo. 
